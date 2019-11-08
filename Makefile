@@ -1,5 +1,8 @@
-all : ./libs/libminifb.a ./bin/window.o libcfx.a
+all : ./libs/libminifb.a ./bin/window.o libcfx.a ./bin/test_basic
 
+./bin/test_basic : libcfx.a ./tests/basic.c
+	gcc ./tests/basic.c -L./bin/ -lcfx -lX11  -o ./bin/test_basic 
+	
 libcfx.a : ./bin/window.o
 	./build_archive.sh
 

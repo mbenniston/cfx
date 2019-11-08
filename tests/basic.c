@@ -1,5 +1,5 @@
-#include "../cfx/include/window.h"
 #include <unistd.h>
+#include "../include/window.h"
 
 int main(int argc, char** argv) {
 
