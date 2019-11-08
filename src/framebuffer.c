@@ -12,7 +12,7 @@ FrameBuffer fbMake(unsigned int width, unsigned int height, unsigned int channel
 }
 
 void fbClear(FrameBuffer* const fb) {
-    memset(fb->data, 0xFF, fb->width * fb->height * fb->channels);
+    memset(fb->data, 0x00, fb->width * fb->height * fb->channels);
 }
 
 void fbFree(FrameBuffer* const fb) {
