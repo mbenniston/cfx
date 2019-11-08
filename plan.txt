@@ -1,6 +1,6 @@
 
-pixel plotting
-primitives, circle, rectangle
+pixel plotting *
+primitives, circle, rectangle *
 image blitting, +scaling 
 text renderering
 keyboard callbacks & state map
