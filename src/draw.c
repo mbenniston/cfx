@@ -36,7 +36,11 @@ void dwDrawRect(int x, int y, int w, int h, Color col, FrameBuffer fb) {
     }
 }
 
-void dwBlitImage(int x, int y, int w, int h, Texture tex, FrameBuffer fb) {
+double lerp(double a, double b, double c) {
+    return a + (b - a) * c;
+}
+
+void dwBlitImage(int x, int y, int w, int h, FilterMode filterMode,  Texture tex, FrameBuffer fb){
     //check if the rect is completely off the fb
     int mx = x, my = y;
     int mw = w, mh = w;
@@ -58,7 +62,47 @@ void dwBlitImage(int x, int y, int w, int h, Texture tex, FrameBuffer fb) {
             double tx = tex.width * (i - x) / (double)w;
             double ty = tex.height * (j - y) / (double)h;
 
-            dwDrawPoint(i,j,texGetPixel(round(tx), round(ty), tex), fb);
+            switch (filterMode)
+            {
+            case FM_NEAREST:
+                dwDrawPoint(i,j,texGetPixel(round(tx), round(ty), tex), fb);
+                break;
+            case FM_BILINEAR:
+            {
+                double x1 = floor(tx); 
+                double x2 = ceil(tx); 
+
+                double y1 = floor(ty); 
+                double y2 = ceil(ty); 
+
+                double sx = (tx - x1) / (x2 - x1);               
+                double sy = (ty - y1) / (y2 - y1);
+
+                if(x2 - x1 == 0) sx = 0;
+                if(y2 - y1 == 0) sy = 0;
+                
+                Color topL = texGetPixel(x1, y2, tex);
+                Color topR = texGetPixel(x2, y2, tex);
+                double top_r = lerp(topL.r, topR.r, sx); 
+                double top_g = lerp(topL.g, topR.g, sx);
+                double top_b = lerp(topL.b, topR.b, sx);
+                
+                Color bottomL = texGetPixel(x1, y1, tex);
+                Color bottomR = texGetPixel(x2, y1, tex);
+                double bottom_r = lerp(bottomL.r, bottomR.r, sx); 
+                double bottom_g = lerp(bottomL.g, bottomR.g, sx);
+                double bottom_b = lerp(bottomL.b, bottomR.b, sx); 
+
+                double out_r = lerp(bottom_r, top_r, sy); 
+                double out_g = lerp(bottom_g, top_g, sy); 
+                double out_b = lerp(bottom_b, top_b, sy); 
+                dwDrawPoint(i,j, (Color){out_r, out_g, out_b},  fb);
+            }
+
+                break;
+            default:
+                break;
+            }
         }
     }
 }

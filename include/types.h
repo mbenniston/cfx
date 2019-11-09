@@ -5,4 +5,8 @@ typedef struct {
     unsigned char r,g,b;
 } Color;
 
+typedef enum {
+    FM_NEAREST, FM_BILINEAR
+} FilterMode;
+
 #endif
