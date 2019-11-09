@@ -5,12 +5,12 @@ all : ./libs/libminifb.a  $(OBJECTS) libcfx.a ./bin/test_basic
 
 LINK_FLAGS = -L./bin/ -L./bin/ -lX11 -llibminifb.a -lm
 C_FLAGS = -I./include/
-CC = cc
+CC = clang
 
 ./bin/test_basic : ./tests/basic.c libcfx.a 
 	$(CC) ./tests/basic.c $(C_FLAGS) -L./bin/ -lcfx -lX11 -lm -o ./bin/test_basic 
 	
-libcfx.a : $(OBJECTS)
+libcfx.a : $(OBJECTS) ./libs/libminifb.a
 	./build_archive.sh
 
 ./bin/%.o : ./src/%.c 

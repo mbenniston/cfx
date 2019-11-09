@@ -62,3 +62,13 @@ void dwBlitImage(int x, int y, Texture tex, FrameBuffer fb) {
         }
     }
 }
+
+void dwDrawLine(int startX, int startY, int endX, int endY, Color col, FrameBuffer fb){
+
+    int stepX = endX - startX;
+    int stepY = endY - startY;
+    for(int x = startX; x < endX; x++){
+        int y = startY + stepY * (x - startX) / (double)stepX;
+        dwDrawPoint(x,y, col, fb);
+    }
+}
