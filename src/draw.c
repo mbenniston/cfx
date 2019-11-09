@@ -35,10 +35,8 @@ void dwDrawRect(int x, int y, int w, int h, Color col, FrameBuffer fb) {
     }
 }
 
-void dwBlitImage(int x, int y, Texture tex, FrameBuffer fb) {
+void dwBlitImage(int x, int y, int w, int h, Texture tex, FrameBuffer fb) {
     //check if the rect is completely off the fb
-    int w = tex.width;
-    int h = tex.height;
     int mx = x, my = y;
 
     if(((x + w) <= 0) || ((y + h) <= 0) || (x >= (long)fb.width) || (y >= (long)fb.height)) {
@@ -55,10 +53,10 @@ void dwBlitImage(int x, int y, Texture tex, FrameBuffer fb) {
     //draw each pixel in the rect
     for(int i = mx; i < mx+w; i++) {
         for(int j = my; j < my+h; j++) {
-            int tx = (i - x);
-            int ty = (j - y);
+            int tx = tex.width * (i - x) / (double)w;
+            int ty = tex.height * (j - y) / (double)h;
 
-            dwDrawPoint(i,j,texGetPixel(tx,ty, tex) , fb);
+            dwDrawPoint(i,j,texGetPixel(tx, ty, tex), fb);
         }
     }
 }

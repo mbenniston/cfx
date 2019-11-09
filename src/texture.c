@@ -26,6 +26,11 @@ void texFree(Texture tex){
 }
 
 Color texGetPixel(int i, int j, Texture tex) {
+    if(i < 0) i =0;
+    if(j < 0) j = 0;
+    if(i >= tex.width) i = tex.width -1;
+    if(j >= tex.height) j = tex.height - 1;
+
     Color col = {0,0,0};
 
     unsigned char* colPtr = &tex.pixels[(i + j * tex.width) * tex.channels];

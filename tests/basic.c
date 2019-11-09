@@ -13,7 +13,7 @@ int main(int argc, char** argv) {
 
     while(!winShouldClose() && !winGetKey(WIN_KEY_Q)){
         fbClear(&fb);
-        dwBlitImage(0, fabs(sin(0.5 * clock() / (double)CLOCKS_PER_SEC) * 200), tex, fb);
+        dwBlitImage(0, fabs(sin(0.5 * clock() / (double)CLOCKS_PER_SEC) * 200), 128, 128, tex, fb);
         char buffer[255];
         sprintf(buffer, "hello world %d\n", (int)(clock() / (double)CLOCKS_PER_SEC));
         textDrawString(0,0, 8, buffer, (Color){55,0 ,255}, fb);
@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
         dwDrawLine(0, 64 + 64, strlen(buffer) * 64, 128, (Color){0,255,0}, fb);
         
         dwDrawLine(0, fabs(cos(0.5 * clock() / (double)CLOCKS_PER_SEC) * 200), strlen(buffer) * 64, fabs(sin(0.5 * clock() / (double)CLOCKS_PER_SEC) * 200), (Color){0,255,0}, fb);
-        dwBlitImage(winGetMouseX(), winGetMouseY(), tex, fb);
+        dwBlitImage(winGetMouseX(), winGetMouseY(),128, 53, tex, fb);
 
         winDisplay(fb);
     }
