@@ -5,7 +5,7 @@
 #include "draw.h"
 
 void textDrawChar(int x, int y, int size, char c, Color col, FrameBuffer fb) {
-    char* character = font8x8_basic[c];
+    char* character = font8x8_basic[(int)c];
 
     for (int i=0; i < 8; i++) {
         for (int j=0; j < 8; j++) {
@@ -15,7 +15,6 @@ void textDrawChar(int x, int y, int size, char c, Color col, FrameBuffer fb) {
             }
         }
     }    
-
 }
 
 void textDrawString(int x, int y, int size, const char* c, Color col, FrameBuffer fb) {

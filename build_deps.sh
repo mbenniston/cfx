@@ -12,7 +12,7 @@ else
 	cd ./modules/minifb
 	mkdir ./build/
 	cd ./build/
-	cmake ..
+	cmake .. -DUSE_WAYLAND_API=OFF
 	make  
 	cp libminifb.a ../../../libs/libminifb.a
 fi

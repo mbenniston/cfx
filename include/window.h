@@ -9,6 +9,8 @@ void winClose();
 void winDisplay(FrameBuffer fb);
 bool winShouldClose();
 int winGetKey(int keyCode);
+int winGetMouseX();
+int winGetMouseY();
 
 static const int WIN_KEY_UNKNOWN       = -1;
 static const int WIN_KEY_SPACE         = 32;

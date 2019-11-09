@@ -7,14 +7,21 @@ int keyMap[400];
 
 static struct Window* s_Window = NULL;
 static bool shouldClose = false;
+static int s_mouseX = 0, s_mouseY = 0;
 
 static void win_kb_func(struct Window *window, Key key, KeyMod mod, bool isPressed) {
     keyMap[key] = isPressed;
 }
 
+static void win_mouse_move_func(struct Window *window, int x, int y) {
+    s_mouseX = x;
+    s_mouseY = y;
+}
+
 void winOpen(int width, int height) {
     s_Window = mfb_open_ex("Test Window", width, height, 0x00);
     mfb_keyboard_callback(s_Window, win_kb_func);
+    mfb_mouse_move_callback(s_Window, win_mouse_move_func);
 }
 
 void winClose() {
@@ -29,10 +36,17 @@ int winGetKey(int keyCode) {
     return keyMap[keyCode];
 }
 
-
 void winDisplay(FrameBuffer fb) {
     UpdateState state = mfb_update(s_Window, fb.data);
-    shouldClose = state < 0;
-    
+    shouldClose = state < 0;    
 }
+
+int winGetMouseX() {
+    return s_mouseX;
+}
+
+int winGetMouseY() {
+    return s_mouseY;
+}
+
 

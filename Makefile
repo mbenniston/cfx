@@ -3,8 +3,8 @@ OBJECTS =  ./bin/stb_image.o ./bin/window.o ./bin/framebuffer.o ./bin/draw.o ./b
 
 all : ./libs/libminifb.a  $(OBJECTS) libcfx.a ./bin/test_basic 
 
-LINK_FLAGS = -L./bin/ -L./bin/ -lX11 -llibminifb.a -lm
-C_FLAGS = -I./include/
+LINK_FLAGS = -O3
+C_FLAGS = -I./include/ -Wall 
 CC = clang
 
 leak_check : ./bin/test_basic
