@@ -5,7 +5,7 @@ all : ./libs/libminifb.a  $(OBJECTS) libcfx.a ./bin/test_basic
 
 LINK_FLAGS = -O3
 C_FLAGS = -I./include/ -Wall 
-CC = clang
+CC = cc
 
 leak_check : ./bin/test_basic
 		valgrind --tool=memcheck --leak-check=yes --show-reachable=yes ./bin/test_basic
