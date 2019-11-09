@@ -8,7 +8,7 @@ int mouseMap[12];
 
 static struct Window* s_Window = NULL;
 static bool shouldClose = false;
-static int s_mouseX = 0, s_mouseY = 0;
+static int s_mouseX = 0, s_mouseY = 0, s_WindowWidth = 0, s_WindowHeight = 0;
 
 static void win_kb_func(struct Window *window, Key key, KeyMod mod, bool isPressed) {
     keyMap[key] = isPressed;
@@ -24,7 +24,10 @@ static void win_mouse_button_func(struct Window *window, MouseButton button, Key
 }
 
 void winOpen(int width, int height) {
+    s_WindowWidth = width;
+    s_WindowHeight = height;
     s_Window = mfb_open_ex("Test Window", width, height, 0x00);
+
     mfb_keyboard_callback(s_Window, win_kb_func);
     mfb_mouse_move_callback(s_Window, win_mouse_move_func);
     mfb_mouse_button_callback(s_Window, win_mouse_button_func);
@@ -43,6 +46,12 @@ int winGetKey(int keyCode) {
 }
 
 void winDisplay(FrameBuffer fb) {
+    if(fb.width != s_WindowWidth || fb.height != s_WindowHeight || fb.channels != 4) {
+        printf("Framebuffer not compatible for displaying on screen\n");
+        winClose();
+        exit(1);
+    }
+
     UpdateState state = mfb_update(s_Window, fb.data);
     shouldClose = state < 0;    
 }
