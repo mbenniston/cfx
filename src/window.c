@@ -4,6 +4,7 @@
 #include "window.h"
 
 int keyMap[400];
+int mouseMap[12];
 
 static struct Window* s_Window = NULL;
 static bool shouldClose = false;
@@ -18,10 +19,15 @@ static void win_mouse_move_func(struct Window *window, int x, int y) {
     s_mouseY = y;
 }
 
+static void win_mouse_button_func(struct Window *window, MouseButton button, KeyMod mod, bool isPressed) {
+    mouseMap[button] = isPressed;
+}
+
 void winOpen(int width, int height) {
     s_Window = mfb_open_ex("Test Window", width, height, 0x00);
     mfb_keyboard_callback(s_Window, win_kb_func);
     mfb_mouse_move_callback(s_Window, win_mouse_move_func);
+    mfb_mouse_button_callback(s_Window, win_mouse_button_func);
 }
 
 void winClose() {
@@ -47,6 +53,10 @@ int winGetMouseX() {
 
 int winGetMouseY() {
     return s_mouseY;
+}
+
+int winGetMouseButton(int button) {
+    return mouseMap[button];
 }
 
 

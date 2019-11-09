@@ -11,6 +11,7 @@ bool winShouldClose();
 int winGetKey(int keyCode);
 int winGetMouseX();
 int winGetMouseY();
+int winGetMouseButton(int button);
 
 static const int WIN_KEY_UNKNOWN       = -1;
 static const int WIN_KEY_SPACE         = 32;
