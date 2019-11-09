@@ -7,6 +7,9 @@ LINK_FLAGS = -L./bin/ -L./bin/ -lX11 -llibminifb.a -lm
 C_FLAGS = -I./include/
 CC = clang
 
+leak_check : ./bin/test_basic
+		valgrind --tool=memcheck --leak-check=yes --show-reachable=yes ./bin/test_basic
+
 ./bin/test_basic : ./tests/basic.c libcfx.a 
 	$(CC) ./tests/basic.c $(C_FLAGS) -L./bin/ -lcfx -lX11 -lm -o ./bin/test_basic 
 	
@@ -20,6 +23,7 @@ $(OBJECTS) : $(SOURCES)
 
 ./libs/libminifb.a :
 	./build_deps.sh
+
 
 deep_clean : clean
 	./build_deps.sh -r

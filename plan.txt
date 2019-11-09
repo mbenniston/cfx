@@ -8,4 +8,4 @@ keyboard callbacks & state map
 	minifb for framebuffer access *
 	stb_image for image loading *
 	font8x8 for simple bitmap font *
-
+	add multi threaded drawing? 
