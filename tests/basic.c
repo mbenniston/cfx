@@ -25,7 +25,6 @@ int main(int argc, char** argv) {
         
         dwDrawLine(0, fabs(cos(0.5 * clock() / (double)CLOCKS_PER_SEC) * 200), strlen(buffer) * 64, fabs(sin(0.5 * clock() / (double)CLOCKS_PER_SEC) * 200), (Color){0,255,0}, fb);
 
-
         winDisplay(fb);
     }
 

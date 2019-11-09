@@ -9,5 +9,6 @@ typedef struct {
 FrameBuffer fbMake(unsigned int width, unsigned int height, unsigned int channels);
 void fbClear(FrameBuffer* const fb);
 void fbFree(FrameBuffer* const fb);
+void fbBlit(FrameBuffer* const readbuf, FrameBuffer* const writebuf);
 
 #endif
