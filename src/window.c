@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "window.h"
+#include "framebuffer.h"
+
+FrameBuffer window_Fb;
 
 int keyMap[400];
 int mouseMap[12];
@@ -28,13 +31,20 @@ void winOpen(int width, int height) {
     s_WindowHeight = height;
     s_Window = mfb_open_ex("Test Window", width, height, 0x00);
 
+    window_Fb = fbMake(width, height, 4);
+
     mfb_keyboard_callback(s_Window, win_kb_func);
     mfb_mouse_move_callback(s_Window, win_mouse_move_func);
     mfb_mouse_button_callback(s_Window, win_mouse_button_func);
 }
 
 void winClose() {
+    fbFree(&window_Fb);
     mfb_close(s_Window);
+}
+
+void winClear(){
+    fbClear(&window_Fb);
 }
 
 bool winShouldClose() {
@@ -45,14 +55,8 @@ int winGetKey(int keyCode) {
     return keyMap[keyCode];
 }
 
-void winDisplay(FrameBuffer fb) {
-    if(fb.width != s_WindowWidth || fb.height != s_WindowHeight || fb.channels != 4) {
-        printf("Framebuffer not compatible for displaying on screen\n");
-        winClose();
-        exit(1);
-    }
-
-    UpdateState state = mfb_update(s_Window, fb.data);
+void winUpdate() {
+    UpdateState state = mfb_update(s_Window, window_Fb.data);
     shouldClose = state < 0;    
 }
 

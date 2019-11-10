@@ -4,9 +4,10 @@
 
 #include "framebuffer.h"
 
+void winClear();
 void winOpen(int width, int height);
 void winClose();
-void winDisplay(FrameBuffer fb);
+void winUpdate();
 bool winShouldClose();
 int winGetKey(int keyCode);
 int winGetMouseX();
