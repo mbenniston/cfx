@@ -9,3 +9,6 @@ keyboard callbacks & state map
 	stb_image for image loading * <-- Add different sampling options
 	font8x8 for simple bitmap font *
 	add multi threaded drawing? 
+	-> Add hardware accelerated drawing using OpenGL (optional at runtime)
+
+

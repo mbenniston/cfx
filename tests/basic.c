@@ -8,7 +8,7 @@
 int main(int argc, char** argv) {
     FrameBuffer fb = fbMake(1280, 720, 4);
 
-    winOpen(60, 720);
+    winOpen(1280, 720);
     Texture tex = texLoad("./tests/sample.png");
 
     while(!winShouldClose() && !winGetKey(WIN_KEY_Q)){
