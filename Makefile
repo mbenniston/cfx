@@ -7,6 +7,21 @@ LINK_FLAGS = -O3
 C_FLAGS = -I./include/ -Wall 
 CC = cc
 
+ifeq ($(PREFIX),)
+    PREFIX := /usr/local
+endif
+
+install : ./bin/libcfx.a
+	install -d $(DESTDIR)$(PREFIX)/lib/
+	install -m 644 ./bin/libcfx.a $(DESTDIR)$(PREFIX)/lib/
+	install -d $(DESTDIR)$(PREFIX)/include/cfx
+	install -m 644 ./include/*.h $(DESTDIR)$(PREFIX)/include/cfx/
+
+uninstall : 
+	rm  $(DESTDIR)$(PREFIX)/lib/libcfx.a
+	rm -r $(DESTDIR)$(PREFIX)/include/cfx
+
+
 leak_check : ./bin/test_basic
 		valgrind --tool=memcheck --leak-check=yes --show-reachable=yes ./bin/test_basic
 
