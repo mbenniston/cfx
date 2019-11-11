@@ -1,5 +1,5 @@
-SOURCES =  ./src/stb_image.c ./src/window.c ./src/draw.c ./src/texture.c ./src/text.c
-OBJECTS =  ./bin/stb_image.o ./bin/window.o ./bin/draw.o ./bin/texture.o ./bin/text.o
+SOURCES =  ./src/stb_image.c ./src/window.c ./src/draw.c ./src/texture.c
+OBJECTS =  ./bin/stb_image.o ./bin/window.o ./bin/draw.o ./bin/texture.o
 
 all :  ./bin/test_basic ./bin/libcfx.a  $(OBJECTS) ./libs/libminifb.a
 

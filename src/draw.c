@@ -1,6 +1,9 @@
 #include "draw.h"
 #include <stdio.h>
 #include <math.h>
+#include <stdbool.h>
+#include <string.h>
+#include "../modules/font8x8/font8x8.h"
 
 extern Texture window_Fb;
 
@@ -135,3 +138,35 @@ void dwDrawLineToTexture(int startX, int startY, int endX, int endY, Color col, 
         dwDrawPointToTexture(x,y, col, dest);
     }
 }
+
+void dwDrawCharToTexture(int x, int y, int size, char c, Color col, Texture dest)
+{
+    char* character = font8x8_basic[(int)c];
+
+    for (int i=0; i < 8; i++) {
+        for (int j=0; j < 8; j++) {
+            bool s = character[j] & 1 << i;
+            if(s) {
+                dwDrawRectToTexture(x + i * size, y + j * size, size, size, col, dest);
+            }
+        }
+    }    
+}
+
+void dwDrawStringToTexture(int x, int y, int size, const char* c, Color col, Texture dest)
+{
+    for(int i = 0; i < strlen(c); i++){
+        dwDrawCharToTexture(x + i * 8 * size, y, size, c[i], col, dest);
+    }
+}
+
+void dwDrawChar(int x, int y, int size, char c, Color col) 
+{
+    dwDrawCharToTexture(x, y, size, c, col, window_Fb);
+}
+
+void dwDrawString(int x, int y, int size, const char* c, Color col)
+{
+    dwDrawStringToTexture(x, y, size, c, col, window_Fb);
+}
+
