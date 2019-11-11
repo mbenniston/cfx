@@ -194,7 +194,6 @@ void process_point(Cmd_Point point) {
     colPtr[1] = point.color.g;
     colPtr[2] = point.color.r;
     colPtr[3] = 255;
-
 }
 
 void process_rect(Cmd_Rect rect) {
@@ -213,7 +212,7 @@ void process_rect(Cmd_Rect rect) {
     //draw each pixel in the rect
     for(int i = rect.x; i < rect.x+rect.w; i++) {
         for(int j = rect.y; j < rect.y+rect.h; j++) {
-            texSetPixel(i, j, rect.color, rect.texture);
+            texSetPixelFast(i, j, rect.color, rect.texture);
         }
     }
 }
@@ -253,7 +252,7 @@ void process_image(Cmd_Image image) {
             switch (image.filterMode)
             {
             case FM_NEAREST:
-                texSetPixel(i,j, texGetPixel(round(tx), round(ty), image.srcTexture),  image.destTexture);
+                texSetPixelFast(i,j, texGetPixel(round(tx), round(ty), image.srcTexture),  image.destTexture);
                 break;
             case FM_BILINEAR:
             {
@@ -284,7 +283,7 @@ void process_image(Cmd_Image image) {
                 double out_r = lerp(bottom_r, top_r, sy); 
                 double out_g = lerp(bottom_g, top_g, sy); 
                 double out_b = lerp(bottom_b, top_b, sy); 
-                texSetPixel(i,j, (Color){out_r, out_g, out_b},  image.destTexture);
+                texSetPixelFast(i,j, (Color){out_r, out_g, out_b},  image.destTexture);
             }
 
                 break;

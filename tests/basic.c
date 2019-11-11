@@ -4,8 +4,10 @@
 #include <math.h>
 #include <string.h>
 #include "../include/cfx.h"
+#include "../src/dw_cmds.h"
 
 extern size_t window_CmdCount;
+extern DrawMode window_DrawMode;
 
 int main(int argc, char** argv) {
     winOpen(1280, 720);
@@ -32,6 +34,12 @@ int main(int argc, char** argv) {
         dwDrawLine(0, 64 + 64, strlen(buffer) * 64, 128, (Color){0, 255, 0});
         
         dwDrawLine(0, fabs(cos(0.5 * clock() / (double)CLOCKS_PER_SEC) * 200), strlen(buffer) * 64, fabs(sin(0.5 * clock() / (double)CLOCKS_PER_SEC) * 200), (Color){0,255,0});
+
+            if(winGetKey(WIN_KEY_B)){
+                window_DrawMode = DM_BUFFERED;
+            } else {
+                window_DrawMode = DM_IMMEDIATE;
+            }
 
         winUpdate();
         frames ++;

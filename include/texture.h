@@ -16,5 +16,6 @@ void texFree(Texture tex);
 
 Color texGetPixel(int i, int j, Texture tex);
 void texSetPixel(int i, int j, Color col, Texture tex);
+void texSetPixelFast(int i, int j, Color col, Texture tex);
 
 #endif

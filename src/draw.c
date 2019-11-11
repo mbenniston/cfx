@@ -109,7 +109,7 @@ void dwDrawCharToTexture(int x, int y, int size, char c, Color col, Texture dest
                 dwDrawRectToTexture(x + i * size, y + j * size, size, size, col, dest);
             }
         }
-    }    
+    }   
 }
 
 void dwDrawStringToTexture(int x, int y, int size, const char* c, Color col, Texture dest)

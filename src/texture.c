@@ -71,6 +71,14 @@ void texSetPixel(int i, int j, Color col, Texture tex)
     }
 }
 
+void texSetPixelFast(int i, int j, Color col, Texture tex)
+{
+    unsigned char t = col.r;
+    col.r = col.b; 
+    col.b = t; 
+    memcpy(&tex.pixels[(i + j * tex.width) * tex.channels], &col.r, sizeof(col));
+}
+
 void texClear(Texture tex) {
     memset(tex.pixels, 0x00, tex.width * tex.height * tex.channels);
 }
