@@ -29,7 +29,6 @@ void dwDrawLine(int startX, int startY, int endX, int endY, Color col){
     dwDrawLineToTexture(startX, startY, endX, endY, col, window_Fb);
 }
 
-
 void dwDrawPointToTexture(int x, int y, Color col, Texture dest) {
     Cmd_Point pointCmd;
     pointCmd.type = POINT_CMD;

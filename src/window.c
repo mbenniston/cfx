@@ -129,7 +129,7 @@ void process_CmdBuf()
         break;            
         case BLIT_IMAGE_CMD:
         {
-            Cmd_Image* image = (Cmd_Image*)image;
+            Cmd_Image* image = (Cmd_Image*)cmd;
             process_image(*image);
             position += sizeof(Cmd_Image);   
             window_CmdCount++;
@@ -192,11 +192,9 @@ void process_image(Cmd_Image image) {
     int mx = image.x, my = image.y;
     int mw = image.w, mh = image.h;
 
-    // if(((image.x + image.w) <= 0) || ((image.y + image.h) <= 0) || (image.x >= (long)image.destTexture.width) || (image.y >= (long)image.destTexture.height)) {
-        // return;
-    // }
-
-    printf("%d %d %d %d %d \n", image.x, image.y, image.w, image.h, image.filterMode);
+    if(((image.x + image.w) <= 0) || ((image.y + image.h) <= 0) || (image.x >= (long)image.destTexture.width) || (image.y >= (long)image.destTexture.height)) {
+        return;
+    }
 
     //clip occordingly 
     if(image.x < 0) { mw = image.x + image.w; mx = 0; }
