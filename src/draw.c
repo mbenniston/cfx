@@ -9,6 +9,8 @@
 
 extern Texture window_Fb;
 
+extern DrawMode window_DrawMode;
+
 extern void*  window_CmdBuf;
 extern size_t window_CmdBufSize;
 extern size_t window_CmdBufMaxSize;
@@ -37,7 +39,11 @@ void dwDrawPointToTexture(int x, int y, Color col, Texture dest) {
     pointCmd.color = col;
     pointCmd.texture = dest;
 
-    pushCmd((Cmd*)&pointCmd);
+    if(window_DrawMode == DM_BUFFERED){
+        pushCmd((Cmd*)&pointCmd);
+    } else {
+        process_point(pointCmd);
+    }
 }
 
 void dwDrawRectToTexture(int x, int y, int w, int h, Color col, Texture dest) {
@@ -50,7 +56,11 @@ void dwDrawRectToTexture(int x, int y, int w, int h, Color col, Texture dest) {
     cmd.color = col;
     cmd.texture = dest;
 
-    pushCmd((Cmd*)&cmd);
+    if(window_DrawMode == DM_BUFFERED){
+        pushCmd((Cmd*)&cmd);
+    } else {
+        process_rect(cmd);
+    }
 }
 
 void dwBlitImageToTexture(int x, int y, int w, int h, FilterMode filterMode,  Texture tex, Texture dest){
@@ -64,7 +74,11 @@ void dwBlitImageToTexture(int x, int y, int w, int h, FilterMode filterMode,  Te
     cmd.srcTexture = tex;
     cmd.destTexture = dest;
 
-    pushCmd((Cmd*)&cmd);
+    if(window_DrawMode == DM_BUFFERED){
+        pushCmd((Cmd*)&cmd);
+    } else {
+        process_image(cmd);
+    }
 }
 
 void dwDrawLineToTexture(int startX, int startY, int endX, int endY, Color col, Texture dest){
@@ -77,7 +91,11 @@ void dwDrawLineToTexture(int startX, int startY, int endX, int endY, Color col, 
     cmd.color = col;
     cmd.texture = dest;
 
-    pushCmd((Cmd*)&cmd);
+    if(window_DrawMode == DM_BUFFERED){
+        pushCmd((Cmd*)&cmd);
+    } else {
+        process_line(cmd);
+    }
 }
 
 void dwDrawCharToTexture(int x, int y, int size, char c, Color col, Texture dest)

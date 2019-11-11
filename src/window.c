@@ -7,6 +7,7 @@
 #include "texture.h"
 #include "dw_cmds.h"
 
+DrawMode window_DrawMode = DM_IMMEDIATE;
 void* window_CmdBuf;
 size_t window_CmdBufSize, window_CmdBufMaxSize;
 
@@ -19,11 +20,12 @@ static struct Window* s_Window = NULL;
 static bool shouldClose = false;
 static int s_mouseX = 0, s_mouseY = 0, s_WindowWidth = 0, s_WindowHeight = 0;
 
-void process_point(Cmd_Point);
-void process_rect(Cmd_Rect);
-void process_image(Cmd_Image);
-void process_line(Cmd_Line);
 void process_CmdBuf();
+
+void setDrawMode(DrawMode dm)
+{
+    window_DrawMode = dm;
+}
 
 void pushCmd(const Cmd* const cmd)
 {
@@ -107,7 +109,7 @@ int winGetKey(int keyCode) {
 }
 
 void winUpdate() {
-    process_CmdBuf();
+    if(window_DrawMode == DM_BUFFERED) process_CmdBuf();
     UpdateState state = mfb_update(s_Window, window_Fb.pixels);
     shouldClose = state < 0;    
 }
