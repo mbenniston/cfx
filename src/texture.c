@@ -35,10 +35,23 @@ Color texGetPixel(int i, int j, Texture tex) {
     Color col = {0,0,0};
 
     unsigned char* colPtr = &tex.pixels[(i + j * tex.width) * tex.channels];
-    col.r = colPtr[0];
+    col.b = colPtr[0];
     col.g = colPtr[1];
-    col.b = colPtr[2];
+    col.r = colPtr[2];
     return col;
+}
+
+void texSetPixel(int i, int j, Color col, Texture tex)
+{
+    if(i < 0) i =0;
+    if(j < 0) j = 0;
+    if(i >= tex.width) i = tex.width -1;
+    if(j >= tex.height) j = tex.height - 1;
+
+    unsigned char* colPtr = &tex.pixels[(i + j * tex.width) * tex.channels];
+    colPtr[0] = col.b;
+    colPtr[1] = col.g;
+    colPtr[2] = col.r;
 }
 
 void texClear(Texture tex) {

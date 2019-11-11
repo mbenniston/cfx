@@ -3,7 +3,7 @@ OBJECTS =  ./bin/stb_image.o ./bin/window.o ./bin/draw.o ./bin/texture.o
 
 all :  ./bin/test_basic ./bin/libcfx.a  $(OBJECTS) ./libs/libminifb.a
 
-LINK_FLAGS = -O3
+LINK_FLAGS = -g3
 C_FLAGS = -I./include/ -Wall 
 CC = cc
 

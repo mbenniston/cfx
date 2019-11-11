@@ -15,5 +15,6 @@ void texBlit(Texture* const readbuf, Texture* const writebuf);
 void texFree(Texture tex);
 
 Color texGetPixel(int i, int j, Texture tex);
+void texSetPixel(int i, int j, Color col, Texture tex);
 
 #endif

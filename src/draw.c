@@ -3,9 +3,15 @@
 #include <math.h>
 #include <stdbool.h>
 #include <string.h>
+#include <assert.h>
 #include "../modules/font8x8/font8x8.h"
+#include "dw_cmds.h"
 
 extern Texture window_Fb;
+
+extern void*  window_CmdBuf;
+extern size_t window_CmdBufSize;
+extern size_t window_CmdBufMaxSize;
 
 static double lerp(double a, double b, double c) {
     return a + (b - a) * c;
@@ -29,37 +35,60 @@ void dwDrawLine(int startX, int startY, int endX, int endY, Color col){
 
 
 void dwDrawPointToTexture(int x, int y, Color col, Texture dest) {
-    //check if the point exists in the fb
-    if(x < 0 || y < 0 || x >= dest.width || y >= dest.height || dest.channels < 3) 
-        return;
+    Cmd_Point pointCmd;
+    pointCmd.type = POINT_CMD;
+    pointCmd.x = x;
+    pointCmd.y = y;
+    pointCmd.color = col;
+    pointCmd.texture = dest;
 
-    //get a ptr to the 'r' element of the color
-    unsigned char* colPtr = &dest.pixels[(x + y * dest.width) * dest.channels];
-    colPtr[0] = col.b;
-    colPtr[1] = col.g;
-    colPtr[2] = col.r;
-    colPtr[3] = 255;
+    //add to command buffer
+    memcpy((char*)window_CmdBuf + window_CmdBufSize, &pointCmd, sizeof(pointCmd));
+    window_CmdBufSize += sizeof(pointCmd);
+
+    // //check if the point exists in the fb
+    // if(x < 0 || y < 0 || x >= dest.width || y >= dest.height || dest.channels < 3) 
+    //     return;
+
+    // //get a ptr to the 'r' element of the color
+    // unsigned char* colPtr = &dest.pixels[(x + y * dest.width) * dest.channels];
+    // colPtr[0] = col.b;
+    // colPtr[1] = col.g;
+    // colPtr[2] = col.r;
+    // colPtr[3] = 255;
 }
 
 void dwDrawRectToTexture(int x, int y, int w, int h, Color col, Texture dest) {
-    //check if the rect is completely off the fb
-    if(((x + w) <= 0) || ((y + h) <= 0) || (x >= (long)dest.width) || (y >= (long)dest.height)) {
-        return;
-    }
+    Cmd_Rect cmd;
+    cmd.type = RECT_CMD;
+    cmd.x = x;
+    cmd.y = y;
+    cmd.w = w;
+    cmd.h = h;
+    cmd.color = col;
+    cmd.texture = dest;
 
-    //clip occordingly 
-    if(x < 0) { w = x + w; x = 0; }
-    if(y < 0) { h = y + h; y = 0; }
+    //add to command buffer
+    memcpy((char*)window_CmdBuf + window_CmdBufSize, &cmd, sizeof(cmd));
+    window_CmdBufSize += sizeof(cmd);
+    // //check if the rect is completely off the fb
+    // if(((x + w) <= 0) || ((y + h) <= 0) || (x >= (long)dest.width) || (y >= (long)dest.height)) {
+    //     return;
+    // }
 
-    if(x + w >= dest.width) { w = dest.width - x;  }
-    if(y + h >= dest.height){ h = dest.height - y; }
+    // //clip occordingly 
+    // if(x < 0) { w = x + w; x = 0; }
+    // if(y < 0) { h = y + h; y = 0; }
+
+    // if(x + w >= dest.width) { w = dest.width - x;  }
+    // if(y + h >= dest.height){ h = dest.height - y; }
     
-    //draw each pixel in the rect
-    for(int i = x; i < x+w; i++) {
-        for(int j = y; j < y+h; j++) {
-            dwDrawPointToTexture(i,j, col, dest);
-        }
-    }
+    // //draw each pixel in the rect
+    // for(int i = x; i < x+w; i++) {
+    //     for(int j = y; j < y+h; j++) {
+    //         dwDrawPointToTexture(i,j, col, dest);
+    //     }
+    // }
 }
 
 void dwBlitImageToTexture(int x, int y, int w, int h, FilterMode filterMode,  Texture tex, Texture dest){
@@ -130,13 +159,18 @@ void dwBlitImageToTexture(int x, int y, int w, int h, FilterMode filterMode,  Te
 }
 
 void dwDrawLineToTexture(int startX, int startY, int endX, int endY, Color col, Texture dest){
+    Cmd_Line cmd;
+    cmd.type = LINE_CMD;
+    cmd.startX = startX;
+    cmd.startY = startY;
+    cmd.endX = endX;
+    cmd.endY = endY;
+    cmd.color = col;
+    cmd.texture = dest;
 
-    int stepX = endX - startX;
-    int stepY = endY - startY;
-    for(int x = startX; x < endX; x++){
-        int y = startY + stepY * (x - startX) / (double)stepX;
-        dwDrawPointToTexture(x,y, col, dest);
-    }
+    //add to command buffer
+    memcpy((char*)window_CmdBuf + window_CmdBufSize, &cmd, sizeof(cmd));
+    window_CmdBufSize += sizeof(cmd);
 }
 
 void dwDrawCharToTexture(int x, int y, int size, char c, Color col, Texture dest)
