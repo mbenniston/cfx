@@ -4,7 +4,6 @@
 #include <math.h>
 #include <string.h>
 #include "window.h"
-#include "texture.h"
 #include "dw_cmds.h"
 
 DrawMode window_DrawMode = DM_IMMEDIATE;
@@ -77,7 +76,7 @@ static void win_mouse_button_func(struct Window *window, MouseButton button, Key
 void winOpen(int width, int height) {
     s_WindowWidth = width;
     s_WindowHeight = height;
-    s_Window = mfb_open_ex("Test Window", width, height, 0x00);
+    s_Window = mfb_open("Test Window", width, height);
 
     window_Fb = texMakeEmpty(width, height, 4);
 
@@ -99,6 +98,12 @@ void winClose() {
 void winClear(){
     texClear(window_Fb);
 }
+
+void winBlit(const Texture* const readbuf)
+{
+    texBlit(readbuf, &window_Fb);
+}
+
 
 bool winShouldClose() {
     return shouldClose;

@@ -1,10 +1,12 @@
 #ifndef CFX_WINDOW_H
 #define CFX_WINDOW_H
 #include <stdbool.h>
+#include "texture.h"
 
 void winClear();
 void winOpen(int width, int height);
 void winClose();
+void winBlit(const Texture* const readbuf);
 void winUpdate();
 bool winShouldClose();
 int winGetKey(int keyCode);

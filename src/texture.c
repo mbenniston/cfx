@@ -50,6 +50,7 @@ Color texGetPixel(int i, int j, Texture tex) {
     col.b = colPtr[0];
     col.g = colPtr[1];
     col.r = colPtr[2];
+
     return col;
 }
 
@@ -64,13 +65,17 @@ void texSetPixel(int i, int j, Color col, Texture tex)
     colPtr[0] = col.b;
     colPtr[1] = col.g;
     colPtr[2] = col.r;
+
+    for(int z = 0; z < tex.channels - 3; z++){
+        colPtr[z + 3] = 255;
+    }
 }
 
 void texClear(Texture tex) {
     memset(tex.pixels, 0x00, tex.width * tex.height * tex.channels);
 }
 
-void texBlit(Texture* const readbuf, Texture* const writebuf) {
+void texBlit(const Texture* const readbuf, Texture* const writebuf) {
     if(readbuf->width == writebuf->width && readbuf->height == writebuf->height && readbuf->channels == writebuf->channels) {
         memcpy(writebuf->pixels, readbuf->pixels, readbuf->width * readbuf->height * readbuf->channels);
     }
