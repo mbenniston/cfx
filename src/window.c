@@ -25,6 +25,36 @@ void process_image(Cmd_Image);
 void process_line(Cmd_Line);
 void process_CmdBuf();
 
+void pushCmd(const Cmd* const cmd)
+{
+    int size = 0;
+    switch (cmd->type)
+    {
+    case POINT_CMD:
+        size += sizeof(Cmd_Point);
+        break;
+    case RECT_CMD:
+        size += sizeof(Cmd_Rect);
+        break;
+    case BLIT_IMAGE_CMD:
+        size += sizeof(Cmd_Image);
+        break;
+    case LINE_CMD:
+        size += sizeof(Cmd_Line);
+        break;
+    default:
+        break;
+    }
+
+    if(window_CmdBufSize + size > window_CmdBufMaxSize) {
+        window_CmdBuf = realloc(window_CmdBuf, window_CmdBufMaxSize + size * 10);
+        window_CmdBufMaxSize += size * 10;
+    }
+
+    memcpy((char*)window_CmdBuf + window_CmdBufSize, cmd, size);
+    window_CmdBufSize += size;
+}
+
 static double lerp(double a, double b, double c) {
     return a + (b - a) * c;
 }
@@ -60,6 +90,7 @@ void winOpen(int width, int height) {
 
 void winClose() {
     texFree(window_Fb);
+    free(window_CmdBuf);
     mfb_close(s_Window);
 }
 

@@ -36,4 +36,6 @@ typedef struct {
     Texture destTexture;
 } Cmd_Image;
 
+void pushCmd(const Cmd* const cmd);
+
 #endif

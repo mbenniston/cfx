@@ -37,9 +37,7 @@ void dwDrawPointToTexture(int x, int y, Color col, Texture dest) {
     pointCmd.color = col;
     pointCmd.texture = dest;
 
-    //add to command buffer
-    memcpy((char*)window_CmdBuf + window_CmdBufSize, &pointCmd, sizeof(pointCmd));
-    window_CmdBufSize += sizeof(pointCmd);
+    pushCmd((Cmd*)&pointCmd);
 }
 
 void dwDrawRectToTexture(int x, int y, int w, int h, Color col, Texture dest) {
@@ -52,9 +50,7 @@ void dwDrawRectToTexture(int x, int y, int w, int h, Color col, Texture dest) {
     cmd.color = col;
     cmd.texture = dest;
 
-    //add to command buffer
-    memcpy((char*)window_CmdBuf + window_CmdBufSize, &cmd, sizeof(cmd));
-    window_CmdBufSize += sizeof(cmd);
+    pushCmd((Cmd*)&cmd);
 }
 
 void dwBlitImageToTexture(int x, int y, int w, int h, FilterMode filterMode,  Texture tex, Texture dest){
@@ -68,9 +64,7 @@ void dwBlitImageToTexture(int x, int y, int w, int h, FilterMode filterMode,  Te
     cmd.srcTexture = tex;
     cmd.destTexture = dest;
 
-    //add to command buffer
-    memcpy((char*)window_CmdBuf + window_CmdBufSize, &cmd, sizeof(cmd));
-    window_CmdBufSize += sizeof(cmd);
+    pushCmd((Cmd*)&cmd);
 }
 
 void dwDrawLineToTexture(int startX, int startY, int endX, int endY, Color col, Texture dest){
@@ -83,9 +77,7 @@ void dwDrawLineToTexture(int startX, int startY, int endX, int endY, Color col, 
     cmd.color = col;
     cmd.texture = dest;
 
-    //add to command buffer
-    memcpy((char*)window_CmdBuf + window_CmdBufSize, &cmd, sizeof(cmd));
-    window_CmdBufSize += sizeof(cmd);
+    pushCmd((Cmd*)&cmd);
 }
 
 void dwDrawCharToTexture(int x, int y, int size, char c, Color col, Texture dest)

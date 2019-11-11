@@ -44,7 +44,6 @@ int main(int argc, char** argv) {
 
     puts("closed");
 
-
     winClose();
 
     texFree(tex);
