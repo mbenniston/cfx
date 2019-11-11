@@ -11,6 +11,9 @@ int main(int argc, char** argv) {
     winOpen(1280, 720);
     Texture tex = texLoad("./tests/sample.png");
 
+    clock_t timer = clock();
+    unsigned int frames = 0;
+
     while(!winShouldClose() && !winGetKey(WIN_KEY_Q)){
         winClear();
         dwBlitImage(0, fabs(sin(0.5 * clock() / (double)CLOCKS_PER_SEC) * 200), 128, 128, FM_NEAREST,tex);
@@ -31,6 +34,12 @@ int main(int argc, char** argv) {
         dwDrawLine(0, fabs(cos(0.5 * clock() / (double)CLOCKS_PER_SEC) * 200), strlen(buffer) * 64, fabs(sin(0.5 * clock() / (double)CLOCKS_PER_SEC) * 200), (Color){0,255,0});
 
         winUpdate();
+        frames ++;
+        if((clock()-timer) / (double)CLOCKS_PER_SEC > 1) {
+            printf("%d fps\n", frames);
+            frames = 0;
+            timer = clock();
+        }
     }
 
     puts("closed");
