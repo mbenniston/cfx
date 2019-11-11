@@ -40,17 +40,6 @@ void dwDrawPointToTexture(int x, int y, Color col, Texture dest) {
     //add to command buffer
     memcpy((char*)window_CmdBuf + window_CmdBufSize, &pointCmd, sizeof(pointCmd));
     window_CmdBufSize += sizeof(pointCmd);
-
-    // //check if the point exists in the fb
-    // if(x < 0 || y < 0 || x >= dest.width || y >= dest.height || dest.channels < 3) 
-    //     return;
-
-    // //get a ptr to the 'r' element of the color
-    // unsigned char* colPtr = &dest.pixels[(x + y * dest.width) * dest.channels];
-    // colPtr[0] = col.b;
-    // colPtr[1] = col.g;
-    // colPtr[2] = col.r;
-    // colPtr[3] = 255;
 }
 
 void dwDrawRectToTexture(int x, int y, int w, int h, Color col, Texture dest) {
@@ -66,24 +55,6 @@ void dwDrawRectToTexture(int x, int y, int w, int h, Color col, Texture dest) {
     //add to command buffer
     memcpy((char*)window_CmdBuf + window_CmdBufSize, &cmd, sizeof(cmd));
     window_CmdBufSize += sizeof(cmd);
-    // //check if the rect is completely off the fb
-    // if(((x + w) <= 0) || ((y + h) <= 0) || (x >= (long)dest.width) || (y >= (long)dest.height)) {
-    //     return;
-    // }
-
-    // //clip occordingly 
-    // if(x < 0) { w = x + w; x = 0; }
-    // if(y < 0) { h = y + h; y = 0; }
-
-    // if(x + w >= dest.width) { w = dest.width - x;  }
-    // if(y + h >= dest.height){ h = dest.height - y; }
-    
-    // //draw each pixel in the rect
-    // for(int i = x; i < x+w; i++) {
-    //     for(int j = y; j < y+h; j++) {
-    //         dwDrawPointToTexture(i,j, col, dest);
-    //     }
-    // }
 }
 
 void dwBlitImageToTexture(int x, int y, int w, int h, FilterMode filterMode,  Texture tex, Texture dest){

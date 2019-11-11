@@ -19,6 +19,12 @@ static struct Window* s_Window = NULL;
 static bool shouldClose = false;
 static int s_mouseX = 0, s_mouseY = 0, s_WindowWidth = 0, s_WindowHeight = 0;
 
+void process_point(Cmd_Point);
+void process_rect(Cmd_Rect);
+void process_image(Cmd_Image);
+void process_line(Cmd_Line);
+void process_CmdBuf();
+
 static double lerp(double a, double b, double c) {
     return a + (b - a) * c;
 }
@@ -86,9 +92,6 @@ int winGetMouseY() {
 int winGetMouseButton(int button) {
     return mouseMap[button];
 }
-
-void process_point(Cmd_Point rect);
-void process_rect(Cmd_Rect rect);
 
 size_t window_CmdCount;
 
