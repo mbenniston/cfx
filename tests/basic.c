@@ -13,8 +13,8 @@ int main(int argc, char** argv) {
 
     while(!winShouldClose() && !winGetKey(WIN_KEY_Q)){
         winClear();
-        // dwBlitImage(0, 0, 1280, 720, FM_NEAREST,tex);
-        // dwBlitImage(0, fabs(sin(0.5 * clock() / (double)CLOCKS_PER_SEC) * 200), 128, 128, FM_NEAREST,tex);
+        dwBlitImage(0, 0, 1280, 720, FM_NEAREST,tex);
+        dwBlitImage(0, fabs(sin(0.5 * clock() / (double)CLOCKS_PER_SEC) * 200), 128, 128, FM_NEAREST,tex);
         // dwBlitImage(128, fabs(sin(0.35 * clock() / (double)CLOCKS_PER_SEC) * 200), 128, 128, FM_BILINEAR,tex);
         // dwBlitImage(256, fabs(sin(0.25 * clock() / (double)CLOCKS_PER_SEC) * 200), 128, 128, FM_BILINEAR,tex);
         char buffer[255];

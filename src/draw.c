@@ -13,10 +13,6 @@ extern void*  window_CmdBuf;
 extern size_t window_CmdBufSize;
 extern size_t window_CmdBufMaxSize;
 
-static double lerp(double a, double b, double c) {
-    return a + (b - a) * c;
-}
-
 void dwDrawPoint(int x, int y, Color col) {
     dwDrawPointToTexture(x,y,col, window_Fb);
 }
@@ -92,70 +88,19 @@ void dwDrawRectToTexture(int x, int y, int w, int h, Color col, Texture dest) {
 }
 
 void dwBlitImageToTexture(int x, int y, int w, int h, FilterMode filterMode,  Texture tex, Texture dest){
-    //check if the rect is completely off the fb
-    int mx = x, my = y;
-    int mw = w, mh = w;
+    Cmd_Image cmd;
+    cmd.type = BLIT_IMAGE_CMD;
+    cmd.filterMode = filterMode;
+    cmd.x = x;
+    cmd.y = y;
+    cmd.w = w;
+    cmd.h = h;
+    cmd.srcTexture = tex;
+    cmd.destTexture = dest;
 
-    if(((x + w) <= 0) || ((y + h) <= 0) || (x >= (long)dest.width) || (y >= (long)dest.height)) {
-        return;
-    }
-
-    //clip occordingly 
-    if(x < 0) { mw = x + w; mx = 0; }
-    if(y < 0) { mh = y + h; my = 0; }
-
-    if(mx + w >= dest.width) { mw = dest.width - mx;  }
-    if(my + h >= dest.height){ mh = dest.height - my; }
-    
-    //draw each pixel in the rect
-    for(int i = mx; i < mx+mw; i++) {
-        for(int j = my; j < my+mh; j++) {
-            double tx = tex.width * (i - x) / (double)w;
-            double ty = tex.height * (j - y) / (double)h;
-
-            switch (filterMode)
-            {
-            case FM_NEAREST:
-                dwDrawPointToTexture( i,j,texGetPixel(round(tx), round(ty), tex), dest);
-                break;
-            case FM_BILINEAR:
-            {
-                double x1 = floor(tx); 
-                double x2 = ceil(tx); 
-
-                double y1 = floor(ty); 
-                double y2 = ceil(ty); 
-
-                double sx = (tx - x1) / (x2 - x1);               
-                double sy = (ty - y1) / (y2 - y1);
-
-                if(x2 - x1 == 0) sx = 0;
-                if(y2 - y1 == 0) sy = 0;
-                
-                Color topL = texGetPixel(x1, y2, tex);
-                Color topR = texGetPixel(x2, y2, tex);
-                double top_r = lerp(topL.r, topR.r, sx); 
-                double top_g = lerp(topL.g, topR.g, sx);
-                double top_b = lerp(topL.b, topR.b, sx);
-                
-                Color bottomL = texGetPixel(x1, y1, tex);
-                Color bottomR = texGetPixel(x2, y1, tex);
-                double bottom_r = lerp(bottomL.r, bottomR.r, sx); 
-                double bottom_g = lerp(bottomL.g, bottomR.g, sx);
-                double bottom_b = lerp(bottomL.b, bottomR.b, sx); 
-
-                double out_r = lerp(bottom_r, top_r, sy); 
-                double out_g = lerp(bottom_g, top_g, sy); 
-                double out_b = lerp(bottom_b, top_b, sy); 
-                dwDrawPointToTexture(i,j, (Color){out_r, out_g, out_b},  dest);
-            }
-
-                break;
-            default:
-                break;
-            }
-        }
-    }
+    //add to command buffer
+    memcpy((char*)window_CmdBuf + window_CmdBufSize, &cmd, sizeof(cmd));
+    window_CmdBufSize += sizeof(cmd);
 }
 
 void dwDrawLineToTexture(int startX, int startY, int endX, int endY, Color col, Texture dest){

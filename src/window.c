@@ -1,6 +1,7 @@
 #include "../modules/minifb/include/MiniFB.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 #include <string.h>
 #include "window.h"
 #include "texture.h"
@@ -17,6 +18,10 @@ int mouseMap[12];
 static struct Window* s_Window = NULL;
 static bool shouldClose = false;
 static int s_mouseX = 0, s_mouseY = 0, s_WindowWidth = 0, s_WindowHeight = 0;
+
+static double lerp(double a, double b, double c) {
+    return a + (b - a) * c;
+}
 
 static void win_kb_func(struct Window *window, Key key, KeyMod mod, bool isPressed) {
     keyMap[key] = isPressed;
@@ -121,8 +126,15 @@ void process_CmdBuf()
             position += sizeof(Cmd_Line);   
             window_CmdCount++;
         }
-        break;        
-
+        break;            
+        case BLIT_IMAGE_CMD:
+        {
+            Cmd_Image* image = (Cmd_Image*)image;
+            process_image(*image);
+            position += sizeof(Cmd_Image);   
+            window_CmdCount++;
+        }
+        break;
         default:
             break;
         }
@@ -171,5 +183,75 @@ void process_line(Cmd_Line line) {
     for(int x = line.startX; x < line.endX; x++){
         int y = line.startY + stepY * (x - line.startX) / (double)stepX;
         texSetPixel(x, y, line.color, line.texture);
+    }
+}
+
+void process_image(Cmd_Image image) {
+
+    //check if the rect is completely off the fb
+    int mx = image.x, my = image.y;
+    int mw = image.w, mh = image.h;
+
+    // if(((image.x + image.w) <= 0) || ((image.y + image.h) <= 0) || (image.x >= (long)image.destTexture.width) || (image.y >= (long)image.destTexture.height)) {
+        // return;
+    // }
+
+    printf("%d %d %d %d %d \n", image.x, image.y, image.w, image.h, image.filterMode);
+
+    //clip occordingly 
+    if(image.x < 0) { mw = image.x + image.w; mx = 0; }
+    if(image.y < 0) { mh = image.y + image.h; my = 0; }
+
+    if(mx + image.w >= image.destTexture.width) { mw = image.destTexture.width - mx;  }
+    if(my + image.h >= image.destTexture.height){ mh = image.destTexture.height - my; }
+    
+    //draw each pixel in the rect
+    for(int i = mx; i < mx+mw; i++) {
+        for(int j = my; j < my+mh; j++) {
+            double tx = image.srcTexture.width * (i - image.x) / (double)image.w;
+            double ty = image.srcTexture.height * (j - image.y) / (double)image.h;
+
+            switch (image.filterMode)
+            {
+            case FM_NEAREST:
+                texSetPixel(i,j, texGetPixel(round(tx), round(ty), image.srcTexture),  image.destTexture);
+                break;
+            case FM_BILINEAR:
+            {
+                double x1 = floor(tx); 
+                double x2 = ceil(tx); 
+
+                double y1 = floor(ty); 
+                double y2 = ceil(ty); 
+
+                double sx = (tx - x1) / (x2 - x1);               
+                double sy = (ty - y1) / (y2 - y1);
+
+                if(x2 - x1 == 0) sx = 0;
+                if(y2 - y1 == 0) sy = 0;
+                
+                Color topL = texGetPixel(x1, y2, image.srcTexture);
+                Color topR = texGetPixel(x2, y2, image.srcTexture);
+                double top_r = lerp(topL.r, topR.r, sx); 
+                double top_g = lerp(topL.g, topR.g, sx);
+                double top_b = lerp(topL.b, topR.b, sx);
+                
+                Color bottomL = texGetPixel(x1, y1, image.srcTexture);
+                Color bottomR = texGetPixel(x2, y1, image.srcTexture);
+                double bottom_r = lerp(bottomL.r, bottomR.r, sx); 
+                double bottom_g = lerp(bottomL.g, bottomR.g, sx);
+                double bottom_b = lerp(bottomL.b, bottomR.b, sx); 
+
+                double out_r = lerp(bottom_r, top_r, sy); 
+                double out_g = lerp(bottom_g, top_g, sy); 
+                double out_b = lerp(bottom_b, top_b, sy); 
+                texSetPixel(i,j, (Color){out_r, out_g, out_b},  image.destTexture);
+            }
+
+                break;
+            default:
+                break;
+            }
+        }
     }
 }

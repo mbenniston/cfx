@@ -16,6 +16,18 @@ Texture texLoad(const char* path){
     Texture out;
     int w,h,c;
     out.pixels = stbi_load(path, &w, &h, &c, 0);
+    
+    if(c >= 3) {
+        for(int x = 0; x < w; x++){
+            for(int y = 0; y < h; y++){
+                unsigned char* col = &out.pixels[(x + y * w) * c];
+                unsigned char temp = col[0];
+                col[0] = col[2];
+                col[2] = temp;
+            }
+        }
+    } 
+    
     out.width = w;
     out.height = h;
     out.channels = c;
