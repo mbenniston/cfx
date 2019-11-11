@@ -10,6 +10,8 @@ typedef struct {
 
 Texture texMakeEmpty(unsigned int w, unsigned int h, unsigned int channels);
 Texture texLoad(const char* path);
+void texClear(Texture tex);
+void texBlit(Texture* const readbuf, Texture* const writebuf);
 void texFree(Texture tex);
 
 Color texGetPixel(int i, int j, Texture tex);

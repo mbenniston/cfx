@@ -1,5 +1,6 @@
 #include "texture.h"
 #include <stdlib.h>
+#include <string.h>
 #include "../modules/stb/stb_image.h"
 
 Texture texMakeEmpty(unsigned int w, unsigned int h, unsigned int channels){
@@ -40,4 +41,23 @@ Color texGetPixel(int i, int j, Texture tex) {
     return col;
 }
 
+void texClear(Texture tex) {
+    memset(tex.pixels, 0x00, tex.width * tex.height * tex.channels);
+}
 
+void texBlit(Texture* const readbuf, Texture* const writebuf) {
+    if(readbuf->width == writebuf->width && readbuf->height == writebuf->height && readbuf->channels == writebuf->channels) {
+        memcpy(writebuf->pixels, readbuf->pixels, readbuf->width * readbuf->height * readbuf->channels);
+    }
+    for(int i = 0; i < writebuf->width; i++) {
+        for(int j = 0; j < writebuf->height; j++) {
+            double si = i / (double)writebuf->width;
+            double sj = j / (double)writebuf->height;
+            int x = si * readbuf->width;
+            int y = sj * readbuf->height;
+            unsigned char* destcol = &writebuf->pixels[(i + j * writebuf->width) * writebuf->channels];
+            unsigned char* readcol = &readbuf->pixels[(x + y * readbuf->width) * readbuf->channels];
+            memcpy(destcol, readcol, sizeof(unsigned char) * readbuf->channels);
+        }
+    }
+}

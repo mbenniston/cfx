@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "window.h"
-#include "framebuffer.h"
+#include "texture.h"
 
-FrameBuffer window_Fb;
+Texture window_Fb;
 
 int keyMap[400];
 int mouseMap[12];
@@ -31,7 +31,7 @@ void winOpen(int width, int height) {
     s_WindowHeight = height;
     s_Window = mfb_open_ex("Test Window", width, height, 0x00);
 
-    window_Fb = fbMake(width, height, 4);
+    window_Fb = texMakeEmpty(width, height, 4);
 
     mfb_keyboard_callback(s_Window, win_kb_func);
     mfb_mouse_move_callback(s_Window, win_mouse_move_func);
@@ -39,12 +39,12 @@ void winOpen(int width, int height) {
 }
 
 void winClose() {
-    fbFree(&window_Fb);
+    texFree(window_Fb);
     mfb_close(s_Window);
 }
 
 void winClear(){
-    fbClear(&window_Fb);
+    texClear(window_Fb);
 }
 
 bool winShouldClose() {
@@ -56,7 +56,7 @@ int winGetKey(int keyCode) {
 }
 
 void winUpdate() {
-    UpdateState state = mfb_update(s_Window, window_Fb.data);
+    UpdateState state = mfb_update(s_Window, window_Fb.pixels);
     shouldClose = state < 0;    
 }
 

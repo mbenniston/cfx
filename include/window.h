@@ -2,8 +2,6 @@
 #define CFX_WINDOW_H
 #include <stdbool.h>
 
-#include "framebuffer.h"
-
 void winClear();
 void winOpen(int width, int height);
 void winClose();

@@ -1,7 +1,6 @@
 #ifndef CFX_DRAW_H
 #define CFX_DRAW_H
 
-#include "framebuffer.h"
 #include "texture.h"
 #include "types.h"
 
