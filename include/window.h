@@ -3,17 +3,28 @@
 #include <stdbool.h>
 #include "texture.h"
 
-void winClear();
-void winOpen(int width, int height);
+void winOpen(int width, int height, const char* title);
 void winClose();
+
+//framebuffer / display functions
+
+//clear the internal framebuffer 
+void winClear();
+
+//blit a texture to the internal framebuffer
 void winBlit(const Texture* const readbuf);
+
+//update the window with the internal framebuffer and process command buffer if enabled
 void winUpdate();
-bool winShouldClose();
+
+//input functions
+bool winShouldClose(); //bug in MiniFB library means this does not work
 int winGetKey(int keyCode);
 int winGetMouseX();
 int winGetMouseY();
 int winGetMouseButton(int button);
 
+//Input enum constants
 static const int WIN_KEY_UNKNOWN       = -1;
 static const int WIN_KEY_SPACE         = 32;
 static const int WIN_KEY_APOSTROPHE    = 39;

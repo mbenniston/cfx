@@ -3,7 +3,8 @@
 #include <string.h>
 #include "../modules/stb/stb_image.h"
 
-Texture texMakeEmpty(unsigned int w, unsigned int h, unsigned int channels){
+Texture texMakeEmpty(unsigned int w, unsigned int h, unsigned int channels)
+{
     Texture out;
     out.width = w;
     out.height = h;
@@ -12,7 +13,8 @@ Texture texMakeEmpty(unsigned int w, unsigned int h, unsigned int channels){
     return out;
 }
 
-Texture texLoad(const char* path){
+Texture texLoad(const char* path)
+{
     Texture out;
     int w,h,c;
     out.pixels = stbi_load(path, &w, &h, &c, 0);
@@ -34,11 +36,13 @@ Texture texLoad(const char* path){
     return out;
 }
 
-void texFree(Texture tex){
+void texFree(Texture tex)
+{
     free(tex.pixels);
 }
 
-Color texGetPixel(int i, int j, Texture tex) {
+Color texGetPixel(int i, int j, Texture tex)
+{
     if(i < 0) i =0;
     if(j < 0) j = 0;
     if(i >= tex.width) i = tex.width -1;
@@ -79,14 +83,17 @@ void texSetPixelFast(int i, int j, Color col, Texture tex)
     memcpy(&tex.pixels[(i + j * tex.width) * tex.channels], &col.r, sizeof(col));
 }
 
-void texClear(Texture tex) {
+void texClear(Texture tex)
+{
     memset(tex.pixels, 0x00, tex.width * tex.height * tex.channels);
 }
 
-void texBlit(const Texture* const readbuf, Texture* const writebuf) {
+void texBlit(const Texture* const readbuf, Texture* const writebuf)
+{
     if(readbuf->width == writebuf->width && readbuf->height == writebuf->height && readbuf->channels == writebuf->channels) {
         memcpy(writebuf->pixels, readbuf->pixels, readbuf->width * readbuf->height * readbuf->channels);
     }
+    
     for(int i = 0; i < writebuf->width; i++) {
         for(int j = 0; j < writebuf->height; j++) {
             double si = i / (double)writebuf->width;

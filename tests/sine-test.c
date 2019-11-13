@@ -3,7 +3,7 @@
 
 int main(int argc, char** argv) {
 
-    winOpen(1280, 720);
+    winOpen(1280, 720, "Sine Test");
 
     int x = 0;
     while(!winGetKey(WIN_KEY_Q)){

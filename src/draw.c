@@ -8,30 +8,10 @@
 #include "dw_cmds.h"
 
 extern Texture window_Fb;
-
 extern DrawMode window_DrawMode;
 
-extern void*  window_CmdBuf;
-extern size_t window_CmdBufSize;
-extern size_t window_CmdBufMaxSize;
-
-void dwDrawPoint(int x, int y, Color col) {
-    dwDrawPointToTexture(x,y,col, window_Fb);
-}
-
-void dwDrawRect(int x, int y, int w, int h, Color col) {
-    dwDrawRectToTexture(x,y, w,h, col, window_Fb);
-}
-
-void dwBlitImage(int x, int y, int w, int h, FilterMode filterMode,  Texture tex){
-    dwBlitImageToTexture(x,y,w,h,filterMode, tex, window_Fb);
-}
-
-void dwDrawLine(int startX, int startY, int endX, int endY, Color col){
-    dwDrawLineToTexture(startX, startY, endX, endY, col, window_Fb);
-}
-
-void dwDrawPointToTexture(int x, int y, Color col, Texture dest) {
+void dwDrawPointToTexture(int x, int y, Color col, Texture dest)
+{
     Cmd_Point pointCmd;
     pointCmd.type = POINT_CMD;
     pointCmd.x = x;
@@ -46,7 +26,8 @@ void dwDrawPointToTexture(int x, int y, Color col, Texture dest) {
     }
 }
 
-void dwDrawRectToTexture(int x, int y, int w, int h, Color col, Texture dest) {
+void dwDrawRectToTexture(int x, int y, int w, int h, Color col, Texture dest)
+{
     Cmd_Rect cmd;
     cmd.type = RECT_CMD;
     cmd.x = x;
@@ -63,7 +44,8 @@ void dwDrawRectToTexture(int x, int y, int w, int h, Color col, Texture dest) {
     }
 }
 
-void dwBlitImageToTexture(int x, int y, int w, int h, FilterMode filterMode,  Texture tex, Texture dest){
+void dwBlitImageToTexture(int x, int y, int w, int h, FilterMode filterMode,  Texture tex, Texture dest)
+{
     Cmd_Image cmd;
     cmd.type = BLIT_IMAGE_CMD;
     cmd.filterMode = filterMode;
@@ -81,7 +63,8 @@ void dwBlitImageToTexture(int x, int y, int w, int h, FilterMode filterMode,  Te
     }
 }
 
-void dwDrawLineToTexture(int startX, int startY, int endX, int endY, Color col, Texture dest){
+void dwDrawLineToTexture(int startX, int startY, int endX, int endY, Color col, Texture dest)
+{
     Cmd_Line cmd;
     cmd.type = LINE_CMD;
     cmd.startX = startX;
@@ -96,6 +79,26 @@ void dwDrawLineToTexture(int startX, int startY, int endX, int endY, Color col, 
     } else {
         process_line(cmd);
     }
+}
+
+void dwDrawPoint(int x, int y, Color col)
+{
+    dwDrawPointToTexture(x,y,col, window_Fb);
+}
+
+void dwDrawRect(int x, int y, int w, int h, Color col)
+{
+    dwDrawRectToTexture(x,y, w,h, col, window_Fb);
+}
+
+void dwBlitImage(int x, int y, int w, int h, FilterMode filterMode,  Texture tex)
+{
+    dwBlitImageToTexture(x,y,w,h,filterMode, tex, window_Fb);
+}
+
+void dwDrawLine(int startX, int startY, int endX, int endY, Color col)
+{
+    dwDrawLineToTexture(startX, startY, endX, endY, col, window_Fb);
 }
 
 void dwDrawCharToTexture(int x, int y, int size, char c, Color col, Texture dest)

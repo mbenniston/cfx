@@ -10,7 +10,7 @@ extern size_t window_CmdCount;
 extern DrawMode window_DrawMode;
 
 int main(int argc, char** argv) {
-    winOpen(1280, 720);
+    winOpen(1280, 720, "Basic Test");
     Texture tex = texLoad("./tests/sample.png");
 
     clock_t timer = clock();
@@ -18,9 +18,9 @@ int main(int argc, char** argv) {
 
     while(!winShouldClose() && !winGetKey(WIN_KEY_Q)){
         winClear();
-        dwBlitImage(0, fabs(sin(0.5 * clock() / (double)CLOCKS_PER_SEC) * 200), 128, 128, FM_NEAREST,tex);
-        dwBlitImage(128, fabs(sin(0.35 * clock() / (double)CLOCKS_PER_SEC) * 200), 128, 128, FM_NEAREST,tex);
-        dwBlitImage(256, fabs(sin(0.25 * clock() / (double)CLOCKS_PER_SEC) * 200), 128, 128, FM_NEAREST,tex);
+        dwBlitImage(0, fabs(sin(0.5 * clock() / (double)CLOCKS_PER_SEC) * 200), 128, 128, FM_BILINEAR,tex);
+        dwBlitImage(128, fabs(sin(0.35 * clock() / (double)CLOCKS_PER_SEC) * 200), 128, 128, FM_BILINEAR,tex);
+        dwBlitImage(256, fabs(sin(0.25 * clock() / (double)CLOCKS_PER_SEC) * 200), 128, 128, FM_BILINEAR,tex);
         char buffer[255];
         sprintf(buffer, "hello world %d\n", (int)(clock() / (double)CLOCKS_PER_SEC));
         dwDrawString(0,0, 8, buffer, (Color){55,0 ,255});
@@ -43,8 +43,9 @@ int main(int argc, char** argv) {
 
         winUpdate();
         frames ++;
-        if((clock()-timer) / (double)CLOCKS_PER_SEC > 1) {
-            printf("%d fps\n", frames);
+        double dt = (clock()-timer) / (double)CLOCKS_PER_SEC;
+        if(dt > 1) {
+            printf("%d fps\n", (int)(frames / dt));
             frames = 0;
             timer = clock();
         }

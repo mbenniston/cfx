@@ -9,6 +9,7 @@
 DrawMode window_DrawMode = DM_IMMEDIATE;
 void* window_CmdBuf;
 size_t window_CmdBufSize, window_CmdBufMaxSize;
+size_t window_CmdCount;
 
 Texture window_Fb;
 
@@ -56,27 +57,32 @@ void pushCmd(const Cmd* const cmd)
     window_CmdBufSize += size;
 }
 
-static double lerp(double a, double b, double c) {
+static double lerp(double a, double b, double c)
+{
     return a + (b - a) * c;
 }
 
-static void win_kb_func(struct Window *window, Key key, KeyMod mod, bool isPressed) {
+static void win_kb_func(struct Window *window, Key key, KeyMod mod, bool isPressed)
+{
     keyMap[key] = isPressed;
 }
 
-static void win_mouse_move_func(struct Window *window, int x, int y) {
+static void win_mouse_move_func(struct Window *window, int x, int y)
+{
     s_mouseX = x;
     s_mouseY = y;
 }
 
-static void win_mouse_button_func(struct Window *window, MouseButton button, KeyMod mod, bool isPressed) {
+static void win_mouse_button_func(struct Window *window, MouseButton button, KeyMod mod, bool isPressed)
+{
     mouseMap[button] = isPressed;
 }
 
-void winOpen(int width, int height) {
+void winOpen(int width, int height, const char* title)
+{
     s_WindowWidth = width;
     s_WindowHeight = height;
-    s_Window = mfb_open("Test Window", width, height);
+    s_Window = mfb_open(title, width, height);
 
     window_Fb = texMakeEmpty(width, height, 4);
 
@@ -89,13 +95,15 @@ void winOpen(int width, int height) {
     window_CmdBuf = malloc(window_CmdBufMaxSize);
 }
 
-void winClose() {
+void winClose()
+{
     texFree(window_Fb);
     free(window_CmdBuf);
     mfb_close(s_Window);
 }
 
-void winClear(){
+void winClear()
+{
     texClear(window_Fb);
 }
 
@@ -105,33 +113,37 @@ void winBlit(const Texture* const readbuf)
 }
 
 
-bool winShouldClose() {
+bool winShouldClose()
+{
     return shouldClose;
 }
 
-int winGetKey(int keyCode) {
+int winGetKey(int keyCode)
+{
     return keyMap[keyCode];
 }
 
-void winUpdate() {
+void winUpdate()
+{
     if(window_DrawMode == DM_BUFFERED) process_CmdBuf();
     UpdateState state = mfb_update(s_Window, window_Fb.pixels);
     shouldClose = state < 0;    
 }
 
-int winGetMouseX() {
+int winGetMouseX()
+{
     return s_mouseX;
 }
 
-int winGetMouseY() {
+int winGetMouseY()
+{
     return s_mouseY;
 }
 
-int winGetMouseButton(int button) {
+int winGetMouseButton(int button)
+{
     return mouseMap[button];
 }
-
-size_t window_CmdCount;
 
 void process_CmdBuf() 
 {
@@ -183,7 +195,8 @@ void process_CmdBuf()
     window_CmdBufSize = 0;
 }
 
-void process_point(Cmd_Point point) {
+void process_point(Cmd_Point point)
+{
     //check if the point exists in the fb
     if(point.x < 0 || point.y < 0 || point.x >= point.texture.width || point.y >= point.texture.height || point.texture.channels < 3) 
         return;
@@ -196,7 +209,8 @@ void process_point(Cmd_Point point) {
     colPtr[3] = 255;
 }
 
-void process_rect(Cmd_Rect rect) {
+void process_rect(Cmd_Rect rect)
+{
     //check if the rect is completely off the fb
     if(((rect.x + rect.w) <= 0) || ((rect.y + rect.h) <= 0) || (rect.x >= (long)rect.texture.width) || (rect.y >= (long)rect.texture.height)) {
         return;
@@ -217,7 +231,8 @@ void process_rect(Cmd_Rect rect) {
     }
 }
 
-void process_line(Cmd_Line line) {
+void process_line(Cmd_Line line)
+{
     double dx =  abs(line.endX-line.startX);
     double sx = line.startX<line.endX ? 1 : -1;
     double dy = -abs(line.endY-line.startY);
@@ -238,7 +253,8 @@ void process_line(Cmd_Line line) {
     }
 }
 
-void process_image(Cmd_Image image) {
+void process_image(Cmd_Image image)
+{
 
     //check if the rect is completely off the fb
     int mx = image.x, my = image.y;
