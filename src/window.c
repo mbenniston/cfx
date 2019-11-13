@@ -218,11 +218,23 @@ void process_rect(Cmd_Rect rect) {
 }
 
 void process_line(Cmd_Line line) {
-    int stepX = line.endX - line.startX;
-    int stepY = line.endY - line.startY;
-    for(int x = line.startX; x < line.endX; x++){
-        int y = line.startY + stepY * (x - line.startX) / (double)stepX;
-        texSetPixel(x, y, line.color, line.texture);
+    double dx =  abs(line.endX-line.startX);
+    double sx = line.startX<line.endX ? 1 : -1;
+    double dy = -abs(line.endY-line.startY);
+    double sy = line.startY<line.endY ? 1 : -1;
+    double err = dx+dy;  /* error value e_xy */
+    while (true) {  /* loop */
+        if (line.startX==line.endX && line.startY==line.endY) break;
+        double e2 = 2*err;
+        if (e2 >= dy) {
+            err += dy; /* e_xy+e_x > 0 */
+            line.startX += sx;
+        }
+        if (e2 <= dx) {/* e_xy+e_y < 0 */
+            err += dx;
+            line.startY += sy;
+        }
+        texSetPixel(line.startX, line.startY, line.color, line.texture);
     }
 }
 

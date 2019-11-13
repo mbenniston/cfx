@@ -1,7 +1,7 @@
-SOURCES =  ./src/stb_image.c ./src/window.c ./src/draw.c ./src/texture.c
+SOURCES =  ./src/stb_image.c ./src/window.c ./src/draw.c ./src/texture.c 
 OBJECTS =  ./bin/stb_image.o ./bin/window.o ./bin/draw.o ./bin/texture.o
 
-all :  ./bin/test_basic ./bin/libcfx.a  $(OBJECTS) ./libs/libminifb.a
+all : ./bin/sine-test ./bin/test_basic ./bin/libcfx.a  $(OBJECTS) ./libs/libminifb.a
 
 LINK_FLAGS = 
 C_FLAGS = -I./include/ -Wall -O3
@@ -24,6 +24,9 @@ uninstall :
 
 leak_check : ./bin/test_basic
 		valgrind --tool=memcheck --leak-check=yes --show-reachable=yes ./bin/test_basic
+
+./bin/sine-test : ./tests/sine-test.c ./bin/libcfx.a
+	$(CC) ./tests/sine-test.c $(C_FLAGS) -L./bin/ -lcfx -lX11 -lm -o ./bin/sine-test 
 
 ./bin/test_basic : ./tests/basic.c ./bin/libcfx.a
 	$(CC) ./tests/basic.c $(C_FLAGS) -L./bin/ -lcfx -lX11 -lm -o ./bin/test_basic 
