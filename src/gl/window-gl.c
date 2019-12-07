@@ -102,6 +102,14 @@ void winOpen(int width, int height, const char* title)
 
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
+    const GLubyte* renderer = glGetString (GL_RENDERER); // get renderer string
+	const GLubyte* version = glGetString (GL_VERSION); // version as a string
+	const GLubyte* shaderVer = glGetString (GL_SHADING_LANGUAGE_VERSION); // version as a string
+
+	printf("Renderer: %s\n",renderer);
+	printf("OpenGL version supported %s\n",version);
+	printf("OpenGL shader version: %s\n",shaderVer);
+
     glfwSetKeyCallback(s_Window, win_kb_func);
     glfwSetMouseButtonCallback(s_Window, win_mouse_button_func);
     glfwSetCursorPosCallback(s_Window, win_mouse_move_func);

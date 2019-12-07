@@ -29,6 +29,18 @@ project "cfx"
 		description = "Force the use of OpenGL for rendering"
 	 }
 
+	 newaction {
+		trigger     = "install",
+		description = "Install cfx",
+		execute = function ()
+			print("Installing cfx")
+				os.execute("install -d /usr/local/lib/")
+				os.execute("install -m 644 ./bin/libcfx.a /usr/local/lib/")
+				os.execute("install -d /usr/local/include/cfx")
+				os.execute("install -m 644 ./include/*.h /usr/local/include/cfx/")
+		end
+	 }
+
 	includedirs {"include", "."}
 
 	files "src/*"
