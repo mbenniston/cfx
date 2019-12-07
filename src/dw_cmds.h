@@ -6,7 +6,7 @@
 
 typedef enum { DM_IMMEDIATE, DM_BUFFERED } DrawMode;
 
-typedef enum { NULL_CMD, POINT_CMD, RECT_CMD, LINE_CMD, BLIT_IMAGE_CMD } Cmd_Type;
+typedef enum { NULL_CMD, POINT_CMD, RECT_CMD, LINE_CMD, BLIT_IMAGE_CMD, CHAR_CMD } Cmd_Type;
 typedef struct { Cmd_Type type; } Cmd;
 
 typedef struct {
@@ -38,6 +38,14 @@ typedef struct {
     Texture destTexture;
 } Cmd_Image;
 
+typedef struct {
+    Cmd_Type type;
+    int x,y, w,h;
+    char character;
+    Color color;
+    Texture destTexture;
+} Cmd_Char;
+
 void pushCmd(const Cmd* const cmd);
 
 void setDrawMode(DrawMode dm);
@@ -46,5 +54,6 @@ void process_point(Cmd_Point);
 void process_rect(Cmd_Rect);
 void process_image(Cmd_Image);
 void process_line(Cmd_Line);
+void process_char(Cmd_Char);
 
 #endif

@@ -1,10 +1,12 @@
 #include "../modules/minifb/include/MiniFB.h"
+#include "../modules/font8x8/font8x8.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <time.h>
 #include <string.h>
 #include "window.h"
-#include "dw_cmds.h"
+#include "../dw_cmds.h"
 
 DrawMode window_DrawMode = DM_IMMEDIATE;
 void* window_CmdBuf;
@@ -43,6 +45,9 @@ void pushCmd(const Cmd* const cmd)
         break;
     case LINE_CMD:
         size += sizeof(Cmd_Line);
+        break;
+    case CHAR_CMD:
+        size += sizeof(Cmd_Char);
         break;
     default:
         break;
@@ -118,6 +123,12 @@ bool winShouldClose()
     return shouldClose;
 }
 
+double winGetTime()
+{
+    return clock() / (double)CLOCKS_PER_SEC;
+}
+
+
 int winGetKey(int keyCode)
 {
     return keyMap[keyCode];
@@ -138,6 +149,15 @@ int winGetMouseX()
 int winGetMouseY()
 {
     return s_mouseY;
+}
+
+int winGetWidth() 
+{
+    return s_WindowWidth;
+}
+int winGetHeight() 
+{
+    return s_WindowHeight;
 }
 
 int winGetMouseButton(int button)
@@ -185,6 +205,14 @@ void process_CmdBuf()
             Cmd_Image* image = (Cmd_Image*)cmd;
             process_image(*image);
             position += sizeof(Cmd_Image);   
+            window_CmdCount++;
+        }
+        break;            
+        case CHAR_CMD:
+        {
+            Cmd_Char* character = (Cmd_Char*)cmd;
+            process_char(*character);
+            position += sizeof(Cmd_Char);   
             window_CmdCount++;
         }
         break;
@@ -320,4 +348,26 @@ void process_image(Cmd_Image image)
             }
         }
     }
+}
+
+void process_char(Cmd_Char cmd) {
+    char* character = font8x8_basic[(int)cmd.character];
+
+    Cmd_Rect rect;
+    // cmd.x + i * cmd.w, cmd.y + j * cmd.h, cmd.w, cmd.h, cmd.color, cmd.destTexture
+    rect.color = cmd.color;
+    rect.w = cmd.w;
+    rect.h = cmd.h;
+    rect.texture = cmd.destTexture;
+
+    for (int i=0; i < 8; i++) {
+        for (int j=0; j < 8; j++) {
+            bool s = character[j] & 1 << i;
+            if(s) {
+                rect.x = cmd.x + i * cmd.w;
+                rect.y = cmd.y + j * cmd.h;
+                process_rect(rect);
+            }
+        }
+    }  
 }
