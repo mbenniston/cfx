@@ -7,6 +7,9 @@
 #include <string.h>
 #include "window.h"
 #include "../dw_cmds.h"
+#include "cfx_memtest.h"
+
+int cfx_numMallocs = 0, cfx_numFrees = 0;
 
 DrawMode window_DrawMode = DM_IMMEDIATE;
 void* window_CmdBuf;
@@ -105,6 +108,10 @@ void winClose()
     texFree(window_Fb);
     free(window_CmdBuf);
     mfb_close(s_Window);
+
+#ifndef NDEBUG
+    printf("Alloc'ed %d times, Free'ed %d times\n", cfx_numMallocs, cfx_numFrees);
+#endif
 }
 
 void winClear()

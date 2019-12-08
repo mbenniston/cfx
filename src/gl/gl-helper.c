@@ -5,6 +5,9 @@
 #include "../../modules/stb/stb_image.h"
 #include "../../modules/font8x8/font8x8_basic.h"
 
+#include "cfx_memtest.h"
+
+
 GLuint colorProg, textureProg, rectVao, rectVbo, lineVao, lineVbo;
 GLint trans_loc[2], scale_loc[2], text_loc[2], color_loc[2], tex_scale_loc, tex_trans_loc;
 GLuint textAtlasTexture;

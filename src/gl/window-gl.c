@@ -8,6 +8,10 @@
 #include "window.h"
 #include "../dw_cmds.h"
 #include "gl-helper.h"
+#include "cfx_memtest.h"
+
+
+int cfx_numMallocs = 0, cfx_numFrees = 0;
 
 DrawMode window_DrawMode = DM_IMMEDIATE;
 void* window_CmdBuf;
@@ -124,9 +128,12 @@ void winOpen(int width, int height, const char* title)
 void winClose()
 {
     glhCleanup();
-
     free(window_CmdBuf);
     glfwTerminate();
+    
+#ifndef NDEBUG
+    printf("Alloc'ed %d times, Free'ed %d times\n", cfx_numMallocs, cfx_numFrees);
+#endif
 }
 
 void winClear()

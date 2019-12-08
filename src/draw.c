@@ -5,6 +5,7 @@
 #include <string.h>
 #include <assert.h>
 #include "dw_cmds.h"
+#include "cfx_memtest.h"
 
 extern Texture window_Fb;
 extern DrawMode window_DrawMode;

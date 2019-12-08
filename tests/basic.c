@@ -3,6 +3,7 @@
 #include <time.h>
 #include <math.h>
 #include <string.h>
+#include "cfx_memtest.h"
 #include "../include/cfx.h"
 #include "../src/dw_cmds.h"
 
@@ -21,6 +22,11 @@ int main(int argc, char** argv) {
     while(!winShouldClose() && !winGetKey(WIN_KEY_Q)){
         winClear();
         const int SIZE = 256;
+        
+    for(int b = 0; b < 128; b++) {
+        dwBlitImage(b * 128, fabs(sin(0.5 * winGetTime()) * 200), SIZE/2, SIZE/2, FM_BILINEAR,tex);
+    }
+
         dwBlitImage(0, fabs(sin(0.5 * winGetTime()) * 200), SIZE/2, SIZE/2, FM_BILINEAR,tex);
         dwBlitImage(SIZE/2.0, fabs(sin(0.35 * winGetTime()) * 200), SIZE, SIZE, FM_BILINEAR,tex);
         dwBlitImage(1.5*SIZE, fabs(sin(0.25 * winGetTime()) * 200), 2*SIZE, 2*SIZE, FM_BILINEAR,tex);

@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../../modules/stb/stb_image.h"
+#include "cfx_memtest.h"
+
 
 Texture texMakeEmpty(unsigned int w, unsigned int h, unsigned int channels)
 {
