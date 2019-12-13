@@ -61,6 +61,7 @@ project "cfx"
 
 project "basic-test"
 	kind "ConsoleApp"
+	dependson {"cfx"}
 	
 	includedirs {"include", "."}
 	files "tests/basic.c"
@@ -68,17 +69,16 @@ project "basic-test"
 
 	configuration "with-opengl"
 		defines{"OPENGL_ACCELERATED"}
-		files "src/gl/*"
 		links {"cfx","glfw3", "X11", "dl", "Xrandr", "Xxf86vm", "Xinerama", "Xcursor", "pthread"}
 
 	configuration "not with-opengl"
-		files "src/minifb/*"
 		links {"cfx","minifb","X11"}
 
 	filter {}
 
 project "sine-test"
 	kind "ConsoleApp"
+	dependson {"cfx"}
 	
 	includedirs {"include", "."}
 	files "tests/sine-test.c"
@@ -86,11 +86,9 @@ project "sine-test"
 
 	configuration "with-opengl"
 		defines{"OPENGL_ACCELERATED"}
-		files "src/gl/*"
 	 	links {"cfx","glfw3", "X11", "dl", "Xrandr", "Xxf86vm", "Xinerama", "Xcursor", "pthread"}
 
 	configuration "not with-opengl"
-		files "src/minifb/*"
 		links {"cfx","minifb","X11"}
 
 	links {"cfx","X11"}
