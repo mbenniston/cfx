@@ -1,12 +1,6 @@
-[submodule "modules/minifb"]
-	path = modules/minifb
-	url = https://github.com/emoon/minifb.git
 [submodule "modules/font8x8"]
 	path = modules/font8x8
 	url = https://github.com/dhepper/font8x8.git
 [submodule "modules/stb"]
 	path = modules/stb
 	url = https://github.com/nothings/stb.git
-[submodule "modules/glfw"]
-	path = modules/glfw
-	url = https://github.com/glfw/glfw.git
