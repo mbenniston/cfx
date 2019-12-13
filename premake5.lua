@@ -64,7 +64,7 @@ project "basic-test"
 	
 	includedirs {"include", "."}
 	files "tests/basic.c"
-	libdirs {"bin/", "libs/", "./modules/glfw/build/src/Release/"}
+	libdirs {"bin/", "libs/"}
 
 	configuration "with-opengl"
 		defines{"OPENGL_ACCELERATED"}
@@ -82,7 +82,7 @@ project "sine-test"
 	
 	includedirs {"include", "."}
 	files "tests/sine-test.c"
-	libdirs "bin/"
+	libdirs {"bin/", "libs/"}
 
 	configuration "with-opengl"
 		defines{"OPENGL_ACCELERATED"}

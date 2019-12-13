@@ -1,4 +1,4 @@
-#include "../modules/minifb/include/MiniFB.h"
+#include <MiniFB.h>
 #include "../modules/font8x8/font8x8.h"
 #include <stdlib.h>
 #include <stdio.h>
